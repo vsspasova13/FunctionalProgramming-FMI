@@ -9,9 +9,3 @@
 (define (first-digit x) (cond ((= x 0) 0)
                              ((< x 10) x)
                           (else   (last-digit (quotient x 10)))))
-
-(define (sum-cubes x y) (+ (* x x x) (* y y y)))
-
-(define (my-max-if a b) (cond ((> a b)a)
-                              (else b)))
-  
