@@ -72,6 +72,9 @@
         ((p? (car l)) (cons (car l) (filterr p? (cdr l))))
         (else (filterr p? (cdr l)))))
 
+(define (filterr p? l)
+  (foldrr (lambda  (x r) (if (p? x) (cons x r) r)) '() l))
+
 (define (mapp f l)
   (if (null? l) l
       (cons (f (car l)) (mapp f (cdr l)))))
@@ -83,3 +86,11 @@
   (if (null? l) nv
   (op (car l) (foldrr op nv (cdr l)))))
 
+(define (accumulate op nv a b term next)
+  (foldrr op nv (map term (collect a b next))))
+
+(define (foldll op nv l)
+  (if (null? l) nv
+      (foldll op (op nv (car l)) (cdr l))))
+
+(define (evali x) (eval x (interaction-environment)))
