@@ -71,3 +71,6 @@
   (cond ((null? l1) '())
         ((null? l2) '())
         (else (cons (op (car l1) (car l2)) (zip-with op (cdr l1) (cdr l2))))))
+
+(define (transpose l)
+  (apply map list l))
