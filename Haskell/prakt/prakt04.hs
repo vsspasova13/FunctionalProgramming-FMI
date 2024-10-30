@@ -506,7 +506,8 @@ zip = undefined
 -- [[1,4],[2,5,7],[3]]
 zipWith :: (a -> b -> c) -> [a] -> [b] -> [c]
 zipWith = undefined
-
+ 
+ 
 -- EXERCISE
 -- Transpose a matrix. Assume all the inner lists have the same length.
 -- HINT: zipWith and map might be useful here.
