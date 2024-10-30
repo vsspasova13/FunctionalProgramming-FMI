@@ -255,7 +255,8 @@ append (a : xs) (b : ys) = a : (append xs (b : ys))
 -- >>> concat []
 -- []
 concat :: [[a]] -> [a]
-concat =undefined
+concat [] = []
+concat (a : xs) =  append a (concat xs)
 
 -- EXERCISE
 -- Reverse a list. It's fine to do this however you like.
@@ -272,8 +273,12 @@ reverse = undefined
 -- EXAMPLES
 -- >>> squareList [1,2,3,5]
 -- [1,4,9,25]
+sqarr :: Integer -> Integer
+sqarr x = x * x
+
 squareList :: [Integer] -> [Integer]
-squareList = undefined
+squareList [] = []
+squareList (a : xs) = (sqarr a) : (squareList xs)
 
 -- EXERCISE
 -- Pair up the given element with each of the elements a list.
@@ -281,7 +286,8 @@ squareList = undefined
 -- >>> megaPair 42 [69,7,42]
 -- [(42,69),(42,7),(42,42)]
 megaPair :: a -> [b] -> [(a, b)]
-megaPair = undefined
+megaPair x [] = []
+megaPair x (a : xs) = (x,a) : (megaPair x xs)
 
 -- EXERCISE
 -- Both of those functions above have the same structure - apply a function to each element of a list.
@@ -294,7 +300,8 @@ megaPair = undefined
 -- >>> map (\x -> (3,x)) [1,2,3] -- same as megaPair 3
 -- [(3,1),(3,2),(3,3)]
 map :: (a -> b) -> [a] -> [b]
-map = undefined
+map _ [] = []
+map f (a : xs) = (f a) : (map f xs)
 
 -- EXERCISE
 -- Check if all the elements in a list are True.
@@ -306,7 +313,8 @@ map = undefined
 -- >>> and [True, True]
 -- True
 and :: [Bool] -> Bool
-and = undefined
+and [] = True 
+and (a: xs) = undefined
 
 -- EXERCISE
 -- Check if all the elements of a list satisfy a predicate
@@ -317,7 +325,8 @@ and = undefined
 -- >>> all isPrime [1,2,3,7]
 -- False
 all :: (a -> Bool) -> [a] -> Bool
-all = undefined
+all p [] = True
+all p (a : xs) = undefined
 
 -- EXERCISE
 -- Implement the cartesian product of two lists.
