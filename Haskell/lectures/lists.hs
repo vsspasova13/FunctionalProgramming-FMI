@@ -2,9 +2,6 @@ import Prelude hiding (head, tail, null, length, enumFromTo, (++), reverse, (!!)
                         init, last, take, drop, map, filter, foldr, foldl, foldr1, foldl1,
                         scanr,scanl, zip, zipWith, unzip, takeWhile, dropWhile,
                         any,all)
-import Text.XHtml (base)
-import System.Win32 (xBUTTON1)
-
 head :: [a] -> a
 head (x:xs) = x
 
