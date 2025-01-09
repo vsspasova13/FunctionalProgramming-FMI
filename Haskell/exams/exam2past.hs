@@ -9,6 +9,7 @@ span p (x:xs)
                  in (x:xs, zs)
     |otherwise = ([],x:xs)
 
+mostFrequent :: (Num a, Ord a) => [[a]] -> a
 mostFrequent [[]] = 0
 mostFrequent l =
     let flatLists = concat l

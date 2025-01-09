@@ -55,6 +55,7 @@ minEl :: Ord a => [a] -> a
 minEl [x] = x
 minEl (x:xs) = min x (minEl xs)
 
+countOcc :: (Num a, Eq t) => t -> [t] -> a
 countOcc _ [] = 0
 countOcc n (x:xs)
     |x == n    = 1 + countOcc n xs
@@ -74,6 +75,7 @@ isPrime x
     | x < 2     = False 
     | otherwise = isPrimeWrapper x 2
 
+addEnd :: t -> [t] -> [t]
 addEnd a [] = [a]
 addEnd a (x:xs) = x : addEnd a xs
 

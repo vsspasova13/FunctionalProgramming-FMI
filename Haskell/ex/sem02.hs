@@ -66,7 +66,6 @@ interleave l1 [] = l1
 interleave [] l2 = l2
 interleave (x:xs) (y:ys) = x : y : interleave xs ys
 
-
 nats :: [Integer]
 nats = 1:map (+1) nats
 
