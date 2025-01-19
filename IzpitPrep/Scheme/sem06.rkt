@@ -194,3 +194,36 @@
   (define (dist move)
     (sqrt (+ (expt (car move) 2) (expt (cdr move) 2))))
   (foldr (lambda (move acc) (+ (dist move) acc)) 0 moves))
+
+;graphs
+(define (adjacency-list nodes edges)
+  (map (lambda (v)
+         (map (lambda (e) (cdr e))
+              (filter (lambda (e) (eqv? v (car e))) edges)))
+       nodes))
+
+(define (has-edge u v edges)
+  (cond ((null? edges) #f)
+        ((and (eqv? u (caar edges)) (eqv? v (cdr (car edges)))) #t)
+        (else (has-edge u v (cdr edges)))))
+  
+  
+(define (path? edges nodes)
+  (let ((curr (car nodes))
+        (n (cdr nodes)))
+    (cond ((null? n) #t)
+          ((has-edge curr (car n) edges) (path? edges n))
+          (else #f))))
+       
+(define (all-simple-paths adj-list start end)
+  (define (helper curr path)
+    (cond ((eqv? end curr) (list (reversel (cons curr path))))
+          ((not (memv curr path))
+            (let ((neighbors (cadar (filter (lambda (x) (eqv? (car x) curr)) adj-list))))
+              (if (not (null? neighbors)) (apply append (map (lambda (neigh) (helper neigh (cons curr path))) neighbors))
+                  '())))
+              
+          (else '())))
+  (helper start '()))
+
+(define adj-list '((1 (2 4)) (2 (3)) (3 (4)) (4 ()))) ;;((1 (2 4))
