@@ -1,3 +1,4 @@
+{-# OPTIONS_GHC -Wno-forall-identifier #-}
 import Prelude hiding (length, foldr, foldl, reverse, init, product, zip, zipWith)
 
 length :: [a] -> Int
