@@ -190,3 +190,48 @@
 
 
 ;streams
+(define the-empty-stream '())
+
+(define-syntax cons-stream
+  (syntax-rules ()
+    ((cons-stream h t) (cons h (delay t)))))
+
+(define head car)
+(define (tail s) (force (cdr s)))
+(define empty-stream? null?)
+
+(define (iterate f x)
+  (cons-stream x (iterate f (f x))))
+
+(define nats (iterate (lambda (x) (+ x 1)) 0))
+
+(define (stream-take n s)
+  (if (= n 0) the-empty-stream
+      (cons (head s) (stream-take (- n 1) (tail s)))))
+
+(define (map-stream f s)
+  (cons-stream (f (head s)) (map-stream f (tail s))))
+
+(define (filter-stream p? s)
+  (if (p? (head s)) (cons-stream (head s) (filter-stream p? (tail s)))
+      (filter-stream p? (tail s))))
+
+(define (isPrime? n)
+   (define (helper i)
+        (cond ((= i n) #t)
+              ((= (remainder n i) 0) #f)
+              (else (helper (+ i 1)))))
+  (if (< n 2) #f
+      (helper 2)))
+
+(define primes1 (filter-stream isPrime? nats))
+
+(define (from n) (cons-stream n (from (+ n 1))))
+
+(define (nondividable n) (lambda (x) (> (remainder x n) 0)))
+
+(define (sieve s)
+  (cons-stream (head s)
+               (sieve (filter-stream (nondividable (head s)) (tail s)))))
+
+(define primes2 (sieve (from 2)))
