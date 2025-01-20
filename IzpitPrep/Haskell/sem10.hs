@@ -1,8 +1,5 @@
 import Data.Char
 import Data.List
-import Graphics.Win32 (pS_ALTERNATE)
-import Distribution.Simple.Program.GHC (GhcOptions(ghcOptHideAllPackages))
-import Distribution.Simple.BuildTarget (resolveBuildTargets)
 
 whisper :: [Char] -> [Char]
 whisper  = map toLower
