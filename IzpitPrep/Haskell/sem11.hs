@@ -102,3 +102,42 @@ connectedComponents graph = helper (nodes graph) [] []
 isFullyConnected :: Graph -> Bool
 isFullyConnected g = length (connectedComponents g) == 1
 
+longestPathFrom :: Graph -> Node -> [Node] -> Int
+longestPathFrom graph curr visited
+    |curr `elem` visited = 0
+    |otherwise = 1 + maximum (0 : [longestPathFrom graph neighbor (curr: visited) | neighbor <- neighbors graph curr])
+
+
+diameter :: Graph -> Int
+diameter graph = maximum [longestPathFrom graph n [] | n <- nodes graph]
+
+{-
+dfs2 :: Graph -> [Node] -> Int -> [Node] ->[Node]
+dfs2 _ []_ _ = []
+dfs2 g (curr:rest) 0 visited = curr : dfs2 g rest 0 visited
+dfs2 g (curr:rest) steps visited
+    |curr `elem` visited = dfs2 g rest steps visited
+    |otherwise           = dfs2 g (rest ++ neighbors curr) (steps - 1) (curr : visited)
+    where
+        neighbors n = case lookup n g of
+            Just ns -> filter (`notElem` visited) ns
+            Nothing -> []
+
+nodesAtDistance graph k = concatMap (\u -> [(u, v) | v <- reachable u k, u < v]) (nodes graph)  
+    where 
+        reachable start k = dfs2 graph [start] k []    
+-}
+
+graph :: Graph
+graph = 
+  [ (1, [2]),   -- Връх 1 е свързан с 2, 3, 4
+    (2, [1, 5, 6]),   -- Връх 2 е свързан с 1, 5, 6
+    (3, [7, 8]),   -- Връх 3 е свързан с 1, 7, 8
+    (4, [9]),      -- Връх 4 е свързан с 1, 9
+    (5, [2, 10]),     -- Връх 5 е свързан с 2, 10
+    (6, [2]),         -- Връх 6 е свързан само с 2
+    (7, [3]),         -- Връх 7 е свързан само с 3
+    (8, [3]),         -- Връх 8 е свързан само с 3
+    (9, [4]),         -- Връх 9 е свързан само с 4
+    (10, [5])         -- Връх 10 е свързан само с 5
+  ]
