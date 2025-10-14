@@ -1,11 +1,6 @@
 module Solutions where
 
 import Prelude hiding (exp, pred, succ)
-import GHC.Base (VecElem(Int16ElemRep), bindIO)
-import Control.Monad.Accum (MonadAccum(accum))
-import Distribution.PackageDescription (IncludeRenaming)
-import Distribution.Simple.Command (OptDescr(BoolOpt))
-
 
 trianglePerimeter ::  Double -> Double -> Double -> Double
 trianglePerimeter a b c = a + b + c
