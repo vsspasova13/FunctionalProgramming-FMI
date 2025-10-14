@@ -4,6 +4,7 @@ import Prelude hiding (exp, pred, succ)
 import GHC.Base (VecElem(Int16ElemRep), bindIO)
 import Control.Monad.Accum (MonadAccum(accum))
 import Distribution.PackageDescription (IncludeRenaming)
+import Distribution.Simple.Command (OptDescr(BoolOpt))
 
 
 trianglePerimeter ::  Double -> Double -> Double -> Double
@@ -103,5 +104,22 @@ totient a = helper 1 a
             | st == n = 0
             | otherwise = if coprime st a then 1 + helper (st + 1) n else helper (st + 1) n 
 
- goldbach :: Int -> (Int, Int)
- goldbach x =
+prime :: Int -> Bool
+prime x 
+    | x <=2 = True
+    | otherwise = helper x 2
+        where 
+            helper :: Int -> Int -> Bool
+            helper x acc
+                | x == acc = True
+                | x `mod` acc == 0 = False
+                | otherwise = helper x (succ acc)
+
+goldbach :: Int -> (Int, Int)
+goldbach = helper 2
+    where 
+        helper :: Int -> Int -> (Int, Int)
+        helper acc n
+            | acc >= n = error "oops"
+            | prime acc && prime (n - acc) = (acc, n - acc)
+            | otherwise = helper (succ acc) n
