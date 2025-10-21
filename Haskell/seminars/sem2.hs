@@ -100,4 +100,15 @@ removeConsecutive (x:(xx:xs)) = helper x xx xs []
             | curr == next = helper next x xs res
             | otherwise = helper next x xs  (res ++ [curr])
 
- -- to do 10,11
+pack :: Eq a => [a] -> [[a]]
+pack [] = []
+pack [x] = [[x]]
+pack (x:(xx:xs)) = helper x xx xs [] []
+    where 
+        helper :: Eq a => a -> a -> [a] -> [a] -> [[a]] -> [[a]]
+        helper curr next [] acc res = if curr == next then res ++ [acc ++ [curr] ++ [next]] else res ++ [acc ++ [curr]] ++ [[next]] 
+        helper curr next (x:xs) acc res
+            | curr == next = helper next x xs (acc ++ [curr]) res
+            | otherwise = helper next x xs [] (res ++ [acc ++ [curr]])
+
+ -- to do 11
