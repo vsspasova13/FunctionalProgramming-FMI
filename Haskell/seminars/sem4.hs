@@ -1,6 +1,7 @@
 module Solutions where
 
 import Prelude hiding (zip, length)
+import Distribution.Simple.Command (OptDescr(BoolOpt))
 
 zip :: [a] -> [b] -> [(a,b)]
 zip [] [] = []
@@ -85,4 +86,67 @@ generate n = intListToString (toBinary n) : generate (n + 1)
 binary :: [String]
 binary = generate 1
 
---to do task 7
+newtype Matrix = Matrix [[Int]]
+    deriving (Show)
+
+emptyMatrix :: Matrix
+emptyMatrix = Matrix []
+
+isMatrix :: Matrix -> Bool
+isMatrix (Matrix (m:ms)) = helper ms
+    where 
+        lenM = length m
+        helper :: [[Int]] -> Bool
+        helper [] = True
+        helper (x:xs) 
+            |length x /= lenM = False
+            |otherwise = helper xs
+
+addRow :: [Int] -> [Int] -> [Int]
+addRow [] _ = []
+addRow _ [] = []
+addRow (x:xs) (y:ys) = (x+y) : addRow xs ys
+
+addMatrices :: Matrix -> Matrix -> Matrix
+addMatrices (Matrix ms1) (Matrix ms2) = Matrix (helper ms1 ms2)
+    where
+        helper ::  [[Int]] -> [[Int]] -> [[Int]]
+        helper (m:ms) (n:ns) = addRow m n : helper ms ns
+
+transposeMatrix' :: [[Int]] -> [[Int]]
+transposeMatrix' ([]:_) = []
+transposeMatrix' xss = firstColumn xss : transposeMatrix' (restColumns xss)
+    where
+        firstColumn :: [[a]] -> [a]
+        firstColumn [] = []
+        firstColumn (x:xs) = head x : firstColumn xs
+
+        restColumns :: [[a]] -> [[a]]
+        restColumns [] = []
+        restColumns (x:xs) = tail x : restColumns xs
+
+dotPr :: [Int] -> [Int] -> Int
+dorPr [] _ = 0
+dotPr _ [] = 0
+dotPr (x:xs) (y:ys) = (x * y) + dotPr xs ys
+
+multMatrices :: Matrix -> Matrix -> Matrix
+multMatrices (Matrix ms1) (Matrix ms2) = Matrix (helper ms1 (transposeMatrix' ms2))
+     where
+        helper ::  [[Int]] -> [[Int]] -> [[Int]]
+        helper [] _ = []
+        helper (x:xs) ms2 = multiplyByRow x ms2 : helper xs ms2
+
+        multiplyByRow :: [Int] -> [[Int]] -> [Int]
+        multiplyByRow _ [] = []
+        multiplyByRow row (x:xs) = dotPr row x : multiplyByRow row xs
+
+transpose :: Matrix -> Matrix
+transpose (Matrix m) = Matrix ( transposeMatrix' m)
+
+m1 = Matrix [[1,2,3],
+             [4,5,6]]
+
+m2 = Matrix [[7,8],
+             [9,10],
+             [11,12]]
