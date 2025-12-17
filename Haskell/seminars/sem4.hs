@@ -1,4 +1,4 @@
-module Solutions where
+module Solutions4 where
 
 import Prelude hiding (zip, length)
 import Distribution.Simple.Command (OptDescr(BoolOpt))
