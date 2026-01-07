@@ -178,3 +178,32 @@ isBalanced (Nodee x l r) = abs (height l - height r) <= 1 && isBalanced l && isB
 isBalancedBST :: (Ord a, Bounded a) => BinTree a -> Bool
 isBalancedBST Empty = True
 isBalancedBST tree = isBST tree && isBalanced tree
+
+--6
+
+paths :: BinTree a -> [[a]]
+paths Empty = []
+paths (Nodee x Empty Empty) = [[x]]
+paths (Nodee x l r) = map (x:) (paths l ++ paths r)
+
+oddProduct :: [Int] -> Int
+oddProduct xs = product [x | x <- xs, x `mod` 2 > 0]
+
+minOddProduct :: [[Int]] -> Int
+minOddProduct xs = minimum [oddProduct x | x <- xs]
+
+pathsWithMinOddProd :: [[Int]] -> [[Int]]
+pathsWithMinOddProd xs =
+    let minProd = minOddProduct xs
+    in [p | p <- xs, oddProduct p == minProd]
+
+maxLengthMinOddProd :: BinTree Int -> Int
+maxLengthMinOddProd Empty = 0
+maxLengthMinOddProd t = 
+    let allPaths = paths t
+    in maximum (map length (pathsWithMinOddProd allPaths))
+
+tree :: BinTree Int
+tree = Nodee 2
+          (Nodee 3 Empty Empty)
+          (Nodee 5 (Nodee 7 Empty Empty) Empty)
