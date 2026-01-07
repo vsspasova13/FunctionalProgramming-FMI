@@ -130,24 +130,53 @@ flatten (Node x xs) = x : concatMap flatten xs
 --5
 
 data BinTree a = Nodee a (BinTree a) (BinTree a) | Empty
+    deriving Show
 
 countLeaves :: BinTree a -> Int
-countLeaves = undefined
+countLeaves Empty = 0
+countLeaves (Nodee _ Empty Empty) = 1
+countLeaves (Nodee _ t1 t2) = countLeaves t1 + countLeaves t2
 
 height :: BinTree a -> Int;
-height = undefined
+height Empty = 0
+height (Nodee _ t1 t2) = 1 + max (height t1) (height t2)
 
 mapBT :: (a -> b) -> BinTree a -> BinTree b;
-mapBT = undefined
+mapBT f Empty = Empty
+mapBT f (Nodee x t1 t2) = (Nodee (f x) (mapBT f t1) (mapBT f t2))
 
 inorder :: BinTree a -> [a];
-inorder = undefined
+inorder Empty = []
+inorder (Nodee x t1 t2) = inorder t1 ++ [x] ++ inorder t2
 
 preorder :: BinTree a -> [a];
-preorder = undefined
+preorder Empty = []
+preorder (Nodee x t1 t2) = x : preorder t1 ++ preorder t2
+
+insertBST :: Ord a => a -> BinTree a -> BinTree a
+insertBST x Empty = Nodee x Empty Empty
+insertBST x (Nodee y t1 t2) 
+    | x < y     = Nodee y (insertBST x t1) t2
+    | otherwise = Nodee y t1 (insertBST x t2)
 
 toBST :: Ord a => [a] -> BinTree a;
-toBST = undefined
+toBST [] = Empty
+toBST (x:xs) = foldl (flip insertBST) Empty (x:xs)
+
+isBST' :: Ord a => a -> a -> BinTree a -> Bool
+isBST' _  _ Empty = True
+isBST' minV maxV (Nodee x l r) =
+     x >= minV && x <= maxV
+     && isBST' minV x l
+     && isBST' x maxV r
+
+isBST :: (Ord a, Bounded a) => BinTree a -> Bool
+isBST = isBST' minBound maxBound 
+
+isBalanced :: BinTree a -> Bool
+isBalanced Empty = True
+isBalanced (Nodee x l r) = abs (height l - height r) <= 1 && isBalanced l && isBalanced r
 
 isBalancedBST :: (Ord a, Bounded a) => BinTree a -> Bool
-isBalancedBST = undefined
+isBalancedBST Empty = True
+isBalancedBST tree = isBST tree && isBalanced tree
